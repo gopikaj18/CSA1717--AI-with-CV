@@ -1,0 +1,12 @@
+parent(john, mary).
+parent(john, david).
+parent(mary, alice).
+
+male(john).
+female(mary).
+female(alice).
+male(david).
+
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+
+% Query: ?- grandparent(john, alice).
