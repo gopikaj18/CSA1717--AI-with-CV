@@ -1,0 +1,48 @@
+# Define the map of Australia
+regions = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+colors = ['Red', 'Green', 'Blue']
+
+# Adjacency relationships
+neighbors = {
+    'WA': ['NT', 'SA'],
+    'NT': ['WA', 'SA', 'Q'],
+    'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+    'Q': ['NT', 'SA', 'NSW'],
+    'NSW': ['Q', 'SA', 'V'],
+    'V': ['SA', 'NSW'],
+    'T': []
+}
+
+# CSP solver using backtracking
+def is_valid(assignment, region, color):
+    for neighbor in neighbors[region]:
+        if neighbor in assignment and assignment[neighbor] == color:
+            return False
+    return True
+
+def backtrack(assignment):
+    # If all regions are assigned, return the solution
+    if len(assignment) == len(regions):
+        return assignment
+
+    # Select an unassigned region
+    unassigned = [r for r in regions if r not in assignment][0]
+
+    for color in colors:
+        if is_valid(assignment, unassigned, color):
+            assignment[unassigned] = color
+            result = backtrack(assignment)
+            if result:
+                return result
+            del assignment[unassigned]  # Backtrack
+
+    return None
+
+# Run the CSP solver
+solution = backtrack({})
+if solution:
+    print("Map Coloring Solution:")
+    for region in regions:
+        print(f"{region}: {solution[region]}")
+else:
+    print("No solution found.")
