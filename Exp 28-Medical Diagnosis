@@ -1,0 +1,14 @@
+symptom(john, fever).
+symptom(john, cough).
+disease(flu, [fever, cough]).
+
+diagnose(Person, Disease) :-
+    disease(Disease, Symptoms),
+    check_symptoms(Person, Symptoms).
+
+check_symptoms(_, []).
+check_symptoms(Person, [H|T]) :-
+    symptom(Person, H),
+    check_symptoms(Person, T).
+
+% Query: ?- diagnose(john, Disease).
