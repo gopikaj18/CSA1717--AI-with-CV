@@ -1,0 +1,18 @@
+% count_vowels(List, Count) - Count is the number of vowels in List
+is_vowel(a).
+is_vowel(e).
+is_vowel(i).
+is_vowel(o).
+is_vowel(u).
+
+count_vowels([], 0).
+count_vowels([H|T], Count) :-
+    is_vowel(H),
+    count_vowels(T, Rest),
+    Count is Rest + 1.
+count_vowels([H|T], Count) :-
+    \+ is_vowel(H),
+    count_vowels(T, Count).
+
+% To use:
+% ?- count_vowels([h, e, l, l, o], Count).  % Count = 2
