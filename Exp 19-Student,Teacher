@@ -1,0 +1,6 @@
+teaches(john, math, cs101).
+teaches(mary, english, en102).
+teaches(alex, science, sc103).
+
+% Query Example:
+% ?- teaches(Teacher, Subject, Code).
