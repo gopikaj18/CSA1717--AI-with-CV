@@ -1,0 +1,5 @@
+goal(X) :- subgoal1(X), subgoal2(X).
+subgoal1(x).
+subgoal2(x).
+
+% Query: ?- goal(X).
