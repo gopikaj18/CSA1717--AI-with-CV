@@ -1,0 +1,17 @@
+% Facts: person(Name, Day, Month, Year)
+person(john, 15, may, 1995).
+person(sara, 8, april, 2000).
+person(ravi, 23, december, 1998).
+person(anu, 10, january, 1997).
+
+% Rule to find DOB of a person
+dob(Name, Day, Month, Year) :-
+    person(Name, Day, Month, Year).
+
+% Rule to find people born in a specific year
+born_in_year(Year, Name) :-
+    person(Name, _, _, Year).
+
+% Rule to find people born in a specific month
+born_in_month(Month, Name) :-
+    person(Name, _, Month, _).
