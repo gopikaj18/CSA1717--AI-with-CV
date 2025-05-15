@@ -1,0 +1,107 @@
+import math
+
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def check_winner(board):
+    lines = board + [list(col) for col in zip(*board)]
+    lines.append([board[i][i] for i in range(3)])
+    lines.append([board[i][2-i] for i in range(3)])
+    
+    for line in lines:
+        if line == ['X'] * 3:
+            return 'X'
+        elif line == ['O'] * 3:
+            return 'O'
+    return None
+
+def is_full(board):
+    return all(cell in ['X', 'O'] for row in board for cell in row)
+
+def get_empty_cells(board):
+    return [(i, j) for i in range(3) for j in range(3) if board[i][j] not in ['X', 'O']]
+
+def minimax(board, depth, alpha, beta, is_maximizing):
+    winner = check_winner(board)
+    if winner == 'O':
+        return 1
+    elif winner == 'X':
+        return -1
+    elif is_full(board):
+        return 0
+
+    if is_maximizing:
+        max_eval = -math.inf
+        for i, j in get_empty_cells(board):
+            board[i][j] = 'O'
+            eval = minimax(board, depth + 1, alpha, beta, False)
+            board[i][j] = str(i*3 + j + 1)
+            max_eval = max(max_eval, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break
+        return max_eval
+    else:
+        min_eval = math.inf
+        for i, j in get_empty_cells(board):
+            board[i][j] = 'X'
+            eval = minimax(board, depth + 1, alpha, beta, True)
+            board[i][j] = str(i*3 + j + 1)
+            min_eval = min(min_eval, eval)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break
+        return min_eval
+
+def best_move(board):
+    best_score = -math.inf
+    move = None
+    for i, j in get_empty_cells(board):
+        board[i][j] = 'O'
+        score = minimax(board, 0, -math.inf, math.inf, False)
+        board[i][j] = str(i*3 + j + 1)
+        if score > best_score:
+            best_score = score
+            move = (i, j)
+    return move
+
+def play_game():
+    board = [['1','2','3'], ['4','5','6'], ['7','8','9']]
+    print_board(board)
+
+    while True:
+        move = input("Your move (1-9): ")
+        if not move.isdigit():
+            continue
+        move = int(move) - 1
+        row, col = divmod(move, 3)
+        if board[row][col] in ['X', 'O']:
+            print("Invalid move!")
+            continue
+        board[row][col] = 'X'
+        print_board(board)
+
+        if check_winner(board):
+            print("You win!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+        ai = best_move(board)
+        if ai:
+            board[ai[0]][ai[1]] = 'O'
+            print("AI played:")
+            print_board(board)
+
+        if check_winner(board):
+            print("AI wins!")
+            break
+        if is_full(board):
+            print("It's a draw!")
+            break
+
+# Run the game
+play_game()
