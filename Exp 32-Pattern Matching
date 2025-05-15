@@ -1,0 +1,9 @@
+% pattern_match(Pattern, List) succeeds if Pattern matches List
+pattern_match([], []).
+pattern_match([H1|T1], [H2|T2]) :-
+    H1 = H2,
+    pattern_match(T1, T2).
+
+% Example usage:
+% ?- pattern_match([a, b, c], [a, b, c]).  % true
+% ?- pattern_match([a, b], [a, b, c]).     % false
