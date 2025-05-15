@@ -1,0 +1,7 @@
+at(monkey, door).
+at(banana, ceiling).
+has(monkey, nothing).
+
+can_reach(monkey, banana) :- at(monkey, middle), climb(monkey), write('Monkey got the banana').
+
+% You can expand this with actions: walk, push box, climb, etc.
