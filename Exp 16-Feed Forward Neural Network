@@ -1,0 +1,58 @@
+import numpy as np
+
+# Sigmoid activation and its derivative
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def sigmoid_deriv(x):
+    return x * (1 - x)
+
+# XOR dataset
+X = np.array([[0, 0],
+              [0, 1],
+              [1, 0],
+              [1, 1]])
+
+y = np.array([[0], [1], [1], [0]])  # XOR output
+
+# Initialize weights and biases randomly
+np.random.seed(42)
+input_size = 2
+hidden_size = 2
+output_size = 1
+
+# Weights
+W1 = np.random.rand(input_size, hidden_size)
+W2 = np.random.rand(hidden_size, output_size)
+
+# Biases
+b1 = np.random.rand(1, hidden_size)
+b2 = np.random.rand(1, output_size)
+
+# Training loop
+epochs = 10000
+learning_rate = 0.1
+
+for epoch in range(epochs):
+    # Forward pass
+    z1 = np.dot(X, W1) + b1
+    a1 = sigmoid(z1)
+    z2 = np.dot(a1, W2) + b2
+    output = sigmoid(z2)
+
+    # Backpropagation
+    error = y - output
+    d_output = error * sigmoid_deriv(output)
+
+    error_hidden = d_output.dot(W2.T)
+    d_hidden = error_hidden * sigmoid_deriv(a1)
+
+    # Update weights and biases
+    W2 += a1.T.dot(d_output) * learning_rate
+    b2 += np.sum(d_output, axis=0, keepdims=True) * learning_rate
+    W1 += X.T.dot(d_hidden) * learning_rate
+    b1 += np.sum(d_hidden, axis=0, keepdims=True) * learning_rate
+
+# Final output after training
+print("Predicted output after training:")
+print(np.round(output, 3))
